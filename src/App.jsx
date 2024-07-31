@@ -1,12 +1,10 @@
 
+import MyForm from "./component/MyForm";
 
 function App() {
-
   return (
-    <>
-      <h1 className='text-red-600'>helo</h1>
-   </>
-  )
+  <MyForm/>
+  );
 }
 
-export default App
+export default App;
