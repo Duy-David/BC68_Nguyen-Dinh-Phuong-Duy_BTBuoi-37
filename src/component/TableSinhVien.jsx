@@ -1,6 +1,6 @@
 import React from "react";
 import { Space, Table, Tag } from "antd";
-const TableSinhVien = ({arrSinhVien}) => {
+const TableSinhVien = ({arrSinhVien,handleDeleteSinhVien}) => {
     //const dataSource = arrSinhVien
     
   const columns = [
@@ -28,12 +28,14 @@ const TableSinhVien = ({arrSinhVien}) => {
     {
       title: "Hành động",
       render: (text, record, index) => {
+        console.log(record)
+        // console.log(text)
         return (
           <>
             <button
-            //   onClick={() => {
-            //     handleDeleteNhanVien(record.msnv);
-            //   }}
+              onClick={() => {
+                handleDeleteSinhVien(record.mssv);
+              }}
               className="py-2 px-5 bg-red-500 text-white rounded-md"
             >
               Xoá

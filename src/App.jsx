@@ -1,10 +1,7 @@
-
 import MyForm from "./component/MyForm";
 
 function App() {
-  return (
-  <MyForm/>
-  );
+  return <MyForm />;
 }
 
 export default App;

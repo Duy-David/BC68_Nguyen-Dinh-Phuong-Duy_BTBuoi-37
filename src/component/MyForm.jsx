@@ -4,7 +4,7 @@ import InputCustom from "./InputCustom";
 import * as yup from "yup";
 import TableSinhVien from "./TableSinhVien";
 import { useDispatch, useSelector } from "react-redux";
-import sinhVienSlice, { themSinhVien } from "../redux/sinhVienSlice";
+import sinhVienSlice, { themSinhVien, xoaSinhVien } from "../redux/sinhVienSlice";
 const MyForm = () => {
   const [arrSinhVien, setArrSinhVien] = useState([]);
 
@@ -37,30 +37,36 @@ const MyForm = () => {
       dispatch(themSinhVien(values));
       resetForm();
     },
-    // validationSchema: yup.object({
-    //   email: yup
-    //     .string()
-    //     .email("Vui lòng nhập định dạng email")
-    //     .required("Vui lòng không được bỏ trống"),
-    //   tenSinhVien: yup.string().required("Vui lòng không được bỏ trống"),
-    //   mssv: yup
-    //     .string()
-    //     .required("Vui lòng không được bỏ trống")
-    //     .max(4, "Vui lòng nhập ít hơn 4 ký tự"),
-    //   soDienThoai: yup
-    //     .string()
-    //     .matches(
-    //       /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/,
-    //       "Vui lòng nhập đúng định dạng số điện thoại"
-    //     )
-    //     .required("Vui lòng không được bỏ trống"),
-    // }),
+    validationSchema: yup.object({
+      email: yup
+        .string()
+        .email("Vui lòng nhập định dạng email")
+        .required("Vui lòng không được bỏ trống"),
+      tenSinhVien: yup.string().required("Vui lòng không được bỏ trống"),
+      mssv: yup
+        .string()
+        .required("Vui lòng không được bỏ trống")
+        .max(4, "Vui lòng nhập ít hơn 4 ký tự"),
+      soDienThoai: yup
+        .string()
+        .matches(
+          /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/,
+          "Vui lòng nhập đúng định dạng số điện thoại"
+        )
+        .required("Vui lòng không được bỏ trống"),
+    }),
   });
   useEffect(() => {
     if (arrSinhVien.length > 0) {
       setArrSinhVien(sinhVien);
     }
   }, [sinhVien]);
+
+  const handleDeleteSinhVien = (mssv) => {
+    const newArrSinhVien = [...arrSinhVien];
+    dispatch(xoaSinhVien(mssv));
+    setArrSinhVien(newArrSinhVien);
+  };
 
   return (
     <>
@@ -116,19 +122,20 @@ const MyForm = () => {
                 type="submit"
                 className="py-2 px-5 bg-green-500 text-white rounded-lg"
               >
-                Thêm nhân viên
+                Thêm Sinh Viên
               </button>
               <button
                 type="button"
                 className="py-2 px-5 bg-red-500 text-white rounded-lg"
+                onClick={handleReset}
               >
-                Reset form
+                Reset Form
               </button>
               <button
                 type="button"
-                className="py-2 px-5 bg-red-500 text-white rounded-lg"
+                className="py-2 px-5 bg-gray-600 text-white rounded-lg"
               >
-                cập nhật nhân viên
+                Cập nhật Sinh Viên
               </button>
             </div>
           </div>
@@ -136,7 +143,7 @@ const MyForm = () => {
       </div>
       <div className="container mt-6">
         <TableSinhVien
-          // handleDeleteNhanVien={handleDeleteNhanVien}
+         handleDeleteSinhVien={handleDeleteSinhVien}
           arrSinhVien={arrSinhVien}
           // handleGetNhanVien={handleGetNhanVien}
         />
