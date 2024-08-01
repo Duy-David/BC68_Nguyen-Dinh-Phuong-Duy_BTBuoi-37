@@ -40,7 +40,7 @@ const sinhVienSlice = createSlice({
       state.sinhVien = state.sinhVien.filter((item) =>
         removeVietnameseTones(item.mssv.toLowerCase()).includes(search)
       );
-      console.log(state.sinhVien);
+      // console.log(state.sinhVien);
     },
   },
 });
