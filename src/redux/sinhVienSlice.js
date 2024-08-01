@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-
+import { createSlice , current} from "@reduxjs/toolkit";
+import { removeVietnameseTones } from "../util/removeVietnameseTones";
 // Initial state
 const initialState = {
   sinhVien: [],
@@ -11,7 +11,7 @@ const sinhVienSlice = createSlice({
   initialState,
   reducers: {
     themSinhVien: (state, action) => {
-      // console.log(current(state));
+      console.log(current(state));
       // console.log(action);
       const newsinhVien = action.payload;
       state.sinhVien.push(newsinhVien);
@@ -35,11 +35,18 @@ const sinhVienSlice = createSlice({
         state.sinhVien[index] = updatedSinhVien;
       }
     },
+    timKiemSinhVien: (state, action) => {
+      const search = removeVietnameseTones(action.payload.toLowerCase());
+      state.sinhVien = state.sinhVien.filter((item) =>
+        removeVietnameseTones(item.mssv.toLowerCase()).includes(search)
+      );
+      console.log(state.sinhVien);
+    },
   },
 });
 
 // Xuất các action creators được tạo tự động bởi createSlice
-export const { themSinhVien, xoaSinhVien, capNhatSinhVien } =
+export const { themSinhVien, xoaSinhVien, capNhatSinhVien, timKiemSinhVien } =
   sinhVienSlice.actions;
 
 // Xuất reducer của slice

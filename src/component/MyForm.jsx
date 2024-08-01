@@ -8,13 +8,13 @@ import sinhVienSlice, {
   capNhatSinhVien,
   themSinhVien,
   xoaSinhVien,
+  timKiemSinhVien
 } from "../redux/sinhVienSlice";
 const MyForm = () => {
   const [arrSinhVien, setArrSinhVien] = useState([]);
   const [editingSinhVien, setEditingSinhVien] = useState(false);
   const { sinhVien } = useSelector((state) => state.sinhVienSlice);
   const dispatch = useDispatch();
-
   const {
     handleChange,
     handleSubmit,
@@ -48,24 +48,24 @@ const MyForm = () => {
       },
     },
     {
-      validationSchema: yup.object({
-        email: yup
-          .string()
-          .email("Vui lòng nhập định dạng email")
-          .required("Vui lòng không được bỏ trống"),
-        tenSinhVien: yup.string().required("Vui lòng không được bỏ trống"),
-        mssv: yup
-          .string()
-          .required("Vui lòng không được bỏ trống")
-          .max(4, "Vui lòng nhập ít hơn 4 ký tự"),
-        soDienThoai: yup
-          .string()
-          .matches(
-            /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/,
-            "Vui lòng nhập đúng định dạng số điện thoại"
-          )
-          .required("Vui lòng không được bỏ trống"),
-      }),
+      //   validationSchema: yup.object({
+      //     email: yup
+      //       .string()
+      //       .email("Vui lòng nhập định dạng email")
+      //       .required("Vui lòng không được bỏ trống"),
+      //     tenSinhVien: yup.string().required("Vui lòng không được bỏ trống"),
+      //     mssv: yup
+      //       .string()
+      //       .required("Vui lòng không được bỏ trống")
+      //       .max(4, "Vui lòng nhập ít hơn 4 ký tự"),
+      //     soDienThoai: yup
+      //       .string()
+      //       .matches(
+      //         /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/,
+      //         "Vui lòng nhập đúng định dạng số điện thoại"
+      //       )
+      //       .required("Vui lòng không được bỏ trống"),
+      //   }),
     }
   );
   useEffect(() => {
@@ -86,6 +86,11 @@ const MyForm = () => {
   const handleEditSinhVien = (editingSinhVien) => {
     setEditingSinhVien(editingSinhVien);
   };
+  const handleSearchSinhVien = (event) => {
+    console.log( event.target.value); 
+    dispatch(timKiemSinhVien(event.target.value));
+  };
+ console.log(arrSinhVien)
 
   return (
     <>
@@ -154,7 +159,26 @@ const MyForm = () => {
           </div>
         </form>
       </div>
-      <div className="container mt-6">
+      <div className=" container  mt-6 grid grid-cols-12 gap-4 ">
+          <div className="form-group col-span-10 ">
+            <input
+              placeholder="Nhập mã sinh viên"
+              type="text"
+              className="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+              onChange={handleSearchSinhVien}
+            />
+          </div>
+        <div className=" col-span-1 ">
+          <button
+            id="btnSearch"
+            className="bg-blue-500 text-white py-2 px-5 text-center rounded-lg "
+          >
+            Search
+          </button>
+        </div>
+      </div>
+
+      <div className="container mt-6 ">
         <TableSinhVien
           handleDeleteSinhVien={handleDeleteSinhVien}
           arrSinhVien={arrSinhVien}
