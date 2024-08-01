@@ -4,13 +4,16 @@ import InputCustom from "./InputCustom";
 import * as yup from "yup";
 import TableSinhVien from "./TableSinhVien";
 import { useDispatch, useSelector } from "react-redux";
-import sinhVienSlice, { themSinhVien, xoaSinhVien } from "../redux/sinhVienSlice";
+import sinhVienSlice, {
+  capNhatSinhVien,
+  themSinhVien,
+  xoaSinhVien,
+} from "../redux/sinhVienSlice";
 const MyForm = () => {
   const [arrSinhVien, setArrSinhVien] = useState([]);
-
+  const [editingSinhVien, setEditingSinhVien] = useState(false);
   const { sinhVien } = useSelector((state) => state.sinhVienSlice);
   const dispatch = useDispatch();
-  console.log(sinhVien);
 
   const {
     handleChange,
@@ -21,51 +24,67 @@ const MyForm = () => {
     setValues,
     handleReset,
     errors,
-    touched, 
+    touched,
     handleBlur,
     isValid,
-  } = useFormik({
-    initialValues: {
-      mssv: "",
-      tenSinhVien: "",
-      soDienThoai: "",
-      email: "",
+  } = useFormik(
+    {
+      initialValues: {
+        mssv: "",
+        tenSinhVien: "",
+        soDienThoai: "",
+        email: "",
+      },
+      onSubmit: (values, { resetForm }) => {
+        const newArrSinhVien = [...arrSinhVien, values];
+        if (editingSinhVien) {
+          dispatch(capNhatSinhVien(values));
+          setEditingSinhVien(false);
+        } else {
+          dispatch(themSinhVien(values));
+        }
+        setArrSinhVien(newArrSinhVien);
+        resetForm();
+      },
     },
-    onSubmit: (values, { resetForm }) => {
-      const newArrSinhVien = [...arrSinhVien, values];
-      setArrSinhVien(newArrSinhVien);
-      dispatch(themSinhVien(values));
-      resetForm();
-    },
-    validationSchema: yup.object({
-      email: yup
-        .string()
-        .email("Vui lòng nhập định dạng email")
-        .required("Vui lòng không được bỏ trống"),
-      tenSinhVien: yup.string().required("Vui lòng không được bỏ trống"),
-      mssv: yup
-        .string()
-        .required("Vui lòng không được bỏ trống")
-        .max(4, "Vui lòng nhập ít hơn 4 ký tự"),
-      soDienThoai: yup
-        .string()
-        .matches(
-          /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/,
-          "Vui lòng nhập đúng định dạng số điện thoại"
-        )
-        .required("Vui lòng không được bỏ trống"),
-    }),
-  });
+    {
+      validationSchema: yup.object({
+        email: yup
+          .string()
+          .email("Vui lòng nhập định dạng email")
+          .required("Vui lòng không được bỏ trống"),
+        tenSinhVien: yup.string().required("Vui lòng không được bỏ trống"),
+        mssv: yup
+          .string()
+          .required("Vui lòng không được bỏ trống")
+          .max(4, "Vui lòng nhập ít hơn 4 ký tự"),
+        soDienThoai: yup
+          .string()
+          .matches(
+            /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/,
+            "Vui lòng nhập đúng định dạng số điện thoại"
+          )
+          .required("Vui lòng không được bỏ trống"),
+      }),
+    }
+  );
   useEffect(() => {
     if (arrSinhVien.length > 0) {
       setArrSinhVien(sinhVien);
     }
   }, [sinhVien]);
+  useEffect(() => {
+    editingSinhVien && setValues(editingSinhVien);
+  }, [editingSinhVien]);
 
   const handleDeleteSinhVien = (mssv) => {
     const newArrSinhVien = [...arrSinhVien];
     dispatch(xoaSinhVien(mssv));
     setArrSinhVien(newArrSinhVien);
+  };
+
+  const handleEditSinhVien = (editingSinhVien) => {
+    setEditingSinhVien(editingSinhVien);
   };
 
   return (
@@ -122,7 +141,7 @@ const MyForm = () => {
                 type="submit"
                 className="py-2 px-5 bg-green-500 text-white rounded-lg"
               >
-                Thêm Sinh Viên
+                {editingSinhVien ? "Cập nhật Sinh Viên" : "Thêm Sinh Viên"}
               </button>
               <button
                 type="button"
@@ -131,21 +150,15 @@ const MyForm = () => {
               >
                 Reset Form
               </button>
-              <button
-                type="button"
-                className="py-2 px-5 bg-gray-600 text-white rounded-lg"
-              >
-                Cập nhật Sinh Viên
-              </button>
             </div>
           </div>
         </form>
       </div>
       <div className="container mt-6">
         <TableSinhVien
-         handleDeleteSinhVien={handleDeleteSinhVien}
+          handleDeleteSinhVien={handleDeleteSinhVien}
           arrSinhVien={arrSinhVien}
-          // handleGetNhanVien={handleGetNhanVien}
+          handleEditSinhVien={handleEditSinhVien}
         />
       </div>
     </>

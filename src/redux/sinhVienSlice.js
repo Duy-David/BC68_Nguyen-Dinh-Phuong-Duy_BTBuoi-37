@@ -17,23 +17,30 @@ const sinhVienSlice = createSlice({
       state.sinhVien.push(newsinhVien);
     },
     xoaSinhVien: (state, action) => {
-       console.log(action.payload)
-       console.log(state.sinhVien) 
       let index = state.sinhVien.findIndex(
-       
         (item) => item.mssv == action.payload
       );
-      console.log(index)
+      console.log(index);
       if (index != -1) {
         state.sinhVien.splice(index, 1);
       }
-      console.log(state.sinhVien)
+      console.log(state.sinhVien);
+    },
+    capNhatSinhVien: (state, action) => {
+      const updatedSinhVien = action.payload;
+      const index = state.sinhVien.findIndex(
+        (item) => item.mssv == updatedSinhVien.mssv
+      );
+      if (index !== -1) {
+        state.sinhVien[index] = updatedSinhVien;
+      }
     },
   },
 });
 
 // Xuất các action creators được tạo tự động bởi createSlice
-export const { themSinhVien,xoaSinhVien} = sinhVienSlice.actions;
+export const { themSinhVien, xoaSinhVien, capNhatSinhVien } =
+  sinhVienSlice.actions;
 
 // Xuất reducer của slice
 export default sinhVienSlice.reducer;

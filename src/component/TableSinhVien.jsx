@@ -1,8 +1,13 @@
 import React from "react";
 import { Space, Table, Tag } from "antd";
-const TableSinhVien = ({arrSinhVien,handleDeleteSinhVien}) => {
-    //const dataSource = arrSinhVien
-    
+const TableSinhVien = ({
+  arrSinhVien,
+  handleDeleteSinhVien,
+  handleEditSinhVien,
+
+}) => {
+  //const dataSource = arrSinhVien
+
   const columns = [
     {
       title: "MSSV",
@@ -19,7 +24,7 @@ const TableSinhVien = ({arrSinhVien,handleDeleteSinhVien}) => {
       dataIndex: "soDienThoai",
       key: "address",
     },
-   
+
     {
       title: "Email",
       dataIndex: "email",
@@ -28,7 +33,7 @@ const TableSinhVien = ({arrSinhVien,handleDeleteSinhVien}) => {
     {
       title: "Hành động",
       render: (text, record, index) => {
-        console.log(record)
+        //console.log(record);
         // console.log(text)
         return (
           <>
@@ -41,10 +46,10 @@ const TableSinhVien = ({arrSinhVien,handleDeleteSinhVien}) => {
               Xoá
             </button>
             <button
-            //   onClick={() => {
-            //     handleGetNhanVien(record);
-            //   }}
-               className="py-2 px-5 bg-yellow-500 rounded-md ml-3"
+              onClick={() => {
+                handleEditSinhVien(record);
+              }}
+              className="py-2 px-5 bg-yellow-500 rounded-md ml-3"
             >
               Sửa
             </button>
@@ -53,9 +58,7 @@ const TableSinhVien = ({arrSinhVien,handleDeleteSinhVien}) => {
       },
     },
   ];
-  return <Table columns={columns} 
-  dataSource={arrSinhVien}
-  />;
+  return <Table columns={columns} dataSource={arrSinhVien} />;
 };
 
 export default TableSinhVien;
