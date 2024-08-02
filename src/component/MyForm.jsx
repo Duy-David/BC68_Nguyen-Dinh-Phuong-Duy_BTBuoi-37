@@ -27,50 +27,46 @@ const MyForm = () => {
     touched,
     handleBlur,
     isValid,
-  } = useFormik(
-    {
-      initialValues: {
-        mssv: "",
-        tenSinhVien: "",
-        soDienThoai: "",
-        email: "",
-      },
-      onSubmit: (values, { resetForm }) => {
-        const newArrSinhVien = [...arrSinhVien, values];
-        if (editingSinhVien) {
-          dispatch(capNhatSinhVien(values));
-          setEditingSinhVien(false);
-        } else {
-          dispatch(themSinhVien(values));
-        }
-        setArrSinhVien(newArrSinhVien);
-        resetForm();
-      },
+  } = useFormik({
+    initialValues: {
+      mssv: "",
+      tenSinhVien: "",
+      soDienThoai: "",
+      email: "",
     },
-    {
-      validationSchema: yup.object({
-        email: yup
-          .string()
-          .required("Vui lòng không được bỏ trống")
-          .email("Vui lòng nhập định dạng email"),
-        tenSinhVien: yup
-          .string()
-          .required("Vui lòng không được bỏ trống")
-          .matches(/^[A-Za-zÀ-ỹà-ỹ]+$/, "Vui lòng nhập tên không phải chử số"),
-        mssv: yup
-          .string()
-          .required("Vui lòng không được bỏ trống")
-          .length(4, "Vui lòng nhập đúng 4 ký tự"),
-        soDienThoai: yup
-          .string()
-          .required("Vui lòng không được bỏ trống")
-          .matches(
-            /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/,
-            "Vui lòng nhập đúng định dạng số điện thoại"
-          ),
-      }),
-    }
-  );
+    onSubmit: (values, { resetForm }) => {
+      const newArrSinhVien = [...arrSinhVien, values];
+      if (editingSinhVien) {
+        dispatch(capNhatSinhVien(values));
+        setEditingSinhVien(false);
+      } else {
+        dispatch(themSinhVien(values));
+      }
+      setArrSinhVien(newArrSinhVien);
+      resetForm();
+    },
+    validationSchema: yup.object({
+      email: yup
+        .string()
+        .required("Vui lòng không được bỏ trống")
+        .email("Vui lòng nhập định dạng email"),
+      tenSinhVien: yup
+        .string()
+        .required("Vui lòng không được bỏ trống")
+        .matches(/^[A-Za-zÀ-ỹà-ỹ-Z\s]+$/, "Vui lòng nhập tên không phải chử số"),
+      mssv: yup
+        .string()
+        .required("Vui lòng không được bỏ trống")
+        .length(4, "Vui lòng nhập đúng 4 ký tự"),
+      soDienThoai: yup
+        .string()
+        .required("Vui lòng không được bỏ trống")
+        .matches(
+          /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/,
+          "Vui lòng nhập đúng định dạng số điện thoại"
+        ),
+    }),
+  });
   useEffect(() => {
     if (arrSinhVien.length > 0) {
       setArrSinhVien(sinhVien);
@@ -91,7 +87,8 @@ const MyForm = () => {
   };
   const handleSearchSinhVien = (event) => {
     console.log(event.target.value);
-    dispatch(timKiemSinhVien(event.target.value));
+    dispatch(timKiemSinhVien(event.target.value))
+    // timKiemSinhVien(event.target.value);
   };
   //  console.log(arrSinhVien)
 
@@ -115,7 +112,7 @@ const MyForm = () => {
             />
             <InputCustom
               contentLabel={"Tên Sinh viên"}
-              placeHolder={"Vui lòng nhập tên nhân viên"}
+              placeHolder={"Vui lòng nhập tên Sinh viên"}
               name={"tenSinhVien"}
               onChange={handleChange}
               value={values.tenSinhVien}
@@ -129,12 +126,12 @@ const MyForm = () => {
               name={"soDienThoai"}
               onChange={handleChange}
               value={values.soDienThoai}
-              onBlur={onblur}
+              onBlur={handleBlur}
               errors={errors.soDienThoai}
               touched={touched.soDienThoai}
             />
             <InputCustom
-              contentLabel={" Email"}
+              contentLabel={"Email"}
               placeHolder={"Vui lòng nhập Email"}
               name={"email"}
               onChange={handleChange}
@@ -173,7 +170,6 @@ const MyForm = () => {
         </div>
         <div className=" col-span-1 ">
           <button
-            id="btnSearch"
             className="bg-blue-500 text-white py-2 px-5 text-center rounded-lg "
           >
             Search
