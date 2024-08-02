@@ -20,6 +20,7 @@ const MyForm = () => {
     handleSubmit,
     values,
     setFieldValue,
+    setFieldError,
     resetForm,
     setValues,
     handleReset,
@@ -35,6 +36,21 @@ const MyForm = () => {
       email: "",
     },
     onSubmit: (values, { resetForm }) => {
+      const mssvExists = sinhVien.some((sv) => sv.mssv === values.mssv);
+      const tenSinhVienExists = sinhVien.some(
+        (sv) => sv.tenSinhVien === values.tenSinhVien
+      );
+      const soDienThoaiExists = sinhVien.some(
+        (sv) => sv.soDienThoai === values.soDienThoai
+      );
+      const emailExists = sinhVien.some((sv) => sv.email === values.email);
+
+      if (mssvExists || tenSinhVienExists || soDienThoaiExists || emailExists) {
+        alert(
+          "MSSV, tên, số điện thoại hoặc email đã tồn tại. Vui lòng nhập thông tin khác."
+        );
+        return;
+      }
       const newArrSinhVien = [...arrSinhVien, values];
       if (editingSinhVien) {
         dispatch(capNhatSinhVien(values));
@@ -53,7 +69,10 @@ const MyForm = () => {
       tenSinhVien: yup
         .string()
         .required("Vui lòng không được bỏ trống")
-        .matches(/^[A-Za-zÀ-ỹà-ỹ-Z\s]+$/, "Vui lòng nhập tên không phải chử số"),
+        .matches(
+          /^[A-Za-zÀ-ỹà-ỹ-Z\s]+$/,
+          "Vui lòng nhập tên không phải chử số"
+        ),
       mssv: yup
         .string()
         .required("Vui lòng không được bỏ trống")
@@ -87,7 +106,7 @@ const MyForm = () => {
   };
   const handleSearchSinhVien = (event) => {
     console.log(event.target.value);
-    dispatch(timKiemSinhVien(event.target.value))
+    dispatch(timKiemSinhVien(event.target.value));
     // timKiemSinhVien(event.target.value);
   };
   //  console.log(arrSinhVien)
@@ -162,16 +181,14 @@ const MyForm = () => {
       <div className=" container  mt-6 grid grid-cols-12 gap-4 ">
         <div className="form-group col-span-10 ">
           <input
-            placeholder="Nhập mã sinh viên"
+            placeholder="Nhập mã sinh viên để tìm kiếm sinh viên"
             type="text"
             className="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
             onChange={handleSearchSinhVien}
           />
         </div>
         <div className=" col-span-1 ">
-          <button
-            className="bg-blue-500 text-white py-2 px-5 text-center rounded-lg "
-          >
+          <button className="bg-blue-500 text-white py-2 px-5 text-center rounded-lg ">
             Search
           </button>
         </div>
