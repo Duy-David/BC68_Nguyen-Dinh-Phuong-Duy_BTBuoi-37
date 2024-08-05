@@ -11,6 +11,7 @@ const InputCustom = ({
   onBlur,
   errors,
   touched,
+  disabled,
 }) => {
   return (
     <div className={classWrapper}>
@@ -25,8 +26,8 @@ const InputCustom = ({
         onChange={onChange}
         value={value}
         onBlur={onBlur}
+        disabled={disabled}
       />
-      {/* Viết toán tử diue962 kiện nếu error với touched được truyền vào thì mới hiện thẻ p dùng báo lỗi */}
       {errors && touched && <p className="text-red-500">{errors}</p>}
     </div>
   );

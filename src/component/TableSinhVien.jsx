@@ -6,7 +6,6 @@ const TableSinhVien = ({
   handleEditSinhVien,
 
 }) => {
-  //const dataSource = arrSinhVien
 
   const columns = [
     {

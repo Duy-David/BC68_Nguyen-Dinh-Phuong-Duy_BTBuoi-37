@@ -11,9 +11,9 @@ import sinhVienSlice, {
   timKiemSinhVien,
 } from "../redux/sinhVienSlice";
 const MyForm = () => {
-  const [arrSinhVien, setArrSinhVien] = useState([]);
   const [editingSinhVien, setEditingSinhVien] = useState(false);
   const { sinhVien } = useSelector((state) => state.sinhVienSlice);
+  const [arrSinhVien, setArrSinhVien] = useState(sinhVien);
   const dispatch = useDispatch();
   const {
     handleChange,
@@ -36,29 +36,37 @@ const MyForm = () => {
       email: "",
     },
     onSubmit: (values, { resetForm }) => {
-      const mssvExists = sinhVien.some((sv) => sv.mssv === values.mssv);
-      const tenSinhVienExists = sinhVien.some(
-        (sv) => sv.tenSinhVien === values.tenSinhVien
-      );
-      const soDienThoaiExists = sinhVien.some(
-        (sv) => sv.soDienThoai === values.soDienThoai
-      );
-      const emailExists = sinhVien.some((sv) => sv.email === values.email);
-
-      if (mssvExists || tenSinhVienExists || soDienThoaiExists || emailExists) {
-        alert(
-          "MSSV, tên, số điện thoại hoặc email đã tồn tại. Vui lòng nhập thông tin khác."
-        );
-        return;
-      }
-      const newArrSinhVien = [...arrSinhVien, values];
       if (editingSinhVien) {
         dispatch(capNhatSinhVien(values));
+        setArrSinhVien((item) =>
+          item.map((sv) => (sv.mssv === values.mssv ? values : sv))
+        );
         setEditingSinhVien(false);
       } else {
+        const mssvExists = sinhVien.some((sv) => sv.mssv === values.mssv);
+        const tenSinhVienExists = sinhVien.some(
+          (sv) => sv.tenSinhVien === values.tenSinhVien
+        );
+        const soDienThoaiExists = sinhVien.some(
+          (sv) => sv.soDienThoai === values.soDienThoai
+        );
+        const emailExists = sinhVien.some((sv) => sv.email === values.email);
+
+        if (
+          mssvExists ||
+          tenSinhVienExists ||
+          soDienThoaiExists ||
+          emailExists
+        ) {
+          alert(
+            "MSSV, tên, số điện thoại hoặc email đã tồn tại. Vui lòng nhập thông tin khác."
+          );
+          return;
+        }
+
         dispatch(themSinhVien(values));
+        setArrSinhVien((sinhVien) => [...sinhVien, values]);
       }
-      setArrSinhVien(newArrSinhVien);
       resetForm();
     },
     validationSchema: yup.object({
@@ -107,9 +115,7 @@ const MyForm = () => {
   const handleSearchSinhVien = (event) => {
     console.log(event.target.value);
     dispatch(timKiemSinhVien(event.target.value));
-    // timKiemSinhVien(event.target.value);
   };
-  //  console.log(arrSinhVien)
 
   return (
     <>
@@ -128,6 +134,7 @@ const MyForm = () => {
               onBlur={handleBlur}
               errors={errors.mssv}
               touched={touched.mssv}
+              disabled={editingSinhVien}
             />
             <InputCustom
               contentLabel={"Tên Sinh viên"}
@@ -179,7 +186,7 @@ const MyForm = () => {
         </form>
       </div>
       <div className=" container  mt-6 grid grid-cols-12 gap-4 ">
-        <div className="form-group col-span-10 ">
+        <div className="form-group col-span-11 ">
           <input
             placeholder="Nhập mã sinh viên để tìm kiếm sinh viên"
             type="text"
@@ -187,11 +194,7 @@ const MyForm = () => {
             onChange={handleSearchSinhVien}
           />
         </div>
-        <div className=" col-span-1 ">
-          <button className="bg-blue-500 text-white py-2 px-5 text-center rounded-lg ">
-            Search
-          </button>
-        </div>
+    
       </div>
 
       <div className="container mt-6 ">

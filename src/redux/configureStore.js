@@ -3,7 +3,7 @@ import sinhVienSlice from "./sinhVienSlice";
 
 export const store = configureStore({
   reducer: {
-    ten: () => "phuong uyen",
+    tenNYC: () => "phuong uyen",
     sinhVienSlice,
   },
 });

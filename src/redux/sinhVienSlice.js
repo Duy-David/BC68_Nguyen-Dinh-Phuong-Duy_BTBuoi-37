@@ -1,22 +1,17 @@
 import { createSlice , current} from "@reduxjs/toolkit";
 import { removeVietnameseTones } from "../util/removeVietnameseTones";
-// Initial state
 const initialState = {
   sinhVien: [],
   originalSinhVien: []
 };
 
-// Tạo slice
 const sinhVienSlice = createSlice({
   name: "sinhVien",
   initialState,
   reducers: {
     themSinhVien: (state, action) => {
-      console.log(current(state));
-      // console.log(action);
-      const newsinhVien = action.payload;
-      state.sinhVien.push(newsinhVien);
-      state.originalSinhVien.push(newsinhVien);
+      state.sinhVien.push(action.payload);
+      state.originalSinhVien = state.sinhVien;
     },
     xoaSinhVien: (state, action) => {
       let index = state.sinhVien.findIndex(
@@ -27,16 +22,13 @@ const sinhVienSlice = createSlice({
         state.sinhVien.splice(index, 1);
         state.originalSinhVien.splice(index, 1);
       }
-     // console.log(state.sinhVien);
     },
     capNhatSinhVien: (state, action) => {
-      const updatedSinhVien = action.payload;
-      const index = state.sinhVien.findIndex(
-        (item) => item.mssv == updatedSinhVien.mssv
-      );
+    
+      const index = state.sinhVien.findIndex(sv => sv.mssv === action.payload.mssv);
       if (index !== -1) {
-        state.sinhVien[index] = updatedSinhVien;
-        state.originalSinhVien[index] = updatedSinhVien; 
+        state.sinhVien[index] = action.payload;
+        state.originalSinhVien = state.sinhVien;
       }
     },
     timKiemSinhVien: (state, action) => {
@@ -44,14 +36,11 @@ const sinhVienSlice = createSlice({
       state.sinhVien = state.originalSinhVien.filter((item) =>
         removeVietnameseTones(item.mssv.toLowerCase()).includes(search)
       );
-      // console.log(state.sinhVien);
     },
   },
 });
 
-// Xuất các action creators được tạo tự động bởi createSlice
 export const { themSinhVien, xoaSinhVien, capNhatSinhVien, timKiemSinhVien } =
   sinhVienSlice.actions;
 
-// Xuất reducer của slice
 export default sinhVienSlice.reducer;
