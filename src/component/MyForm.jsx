@@ -84,7 +84,7 @@ const MyForm = () => {
       mssv: yup
         .string()
         .required("Vui lòng không được bỏ trống")
-        .length(4, "Vui lòng nhập đúng 4 ký tự"),
+        .length(6, "Vui lòng nhập đúng 6 ký tự"),
       soDienThoai: yup
         .string()
         .required("Vui lòng không được bỏ trống")
