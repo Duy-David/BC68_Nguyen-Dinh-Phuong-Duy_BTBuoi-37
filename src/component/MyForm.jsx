@@ -59,7 +59,7 @@ const MyForm = () => {
           emailExists
         ) {
           alert(
-            "MSSV, tên, số điện thoại hoặc email đã tồn tại. Vui lòng nhập thông tin khác."
+            "MSSV, tên, số điện thoại hoặc email đã tồn tại. Vui lòng kiểm tra xem MSSV, tên, số điện thoại hoặc email."
           );
           return;
         }
@@ -114,7 +114,15 @@ const MyForm = () => {
   };
   const handleSearchSinhVien = (event) => {
     console.log(event.target.value);
-    dispatch(timKiemSinhVien(event.target.value));
+    const searchValue = event.target.value;
+
+    if (searchValue === "") {
+      // Nếu ô tìm kiếm bị xóa hết, cập nhật lại mảng sinh viên từ store gốc
+      setArrSinhVien(sinhVien);
+    } else {
+      // Nếu có giá trị tìm kiếm, thực hiện tìm kiếm
+      dispatch(timKiemSinhVien(searchValue));
+    }
   };
 
   return (

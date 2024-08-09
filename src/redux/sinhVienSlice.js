@@ -2,7 +2,7 @@ import { createSlice , current} from "@reduxjs/toolkit";
 import { removeVietnameseTones } from "../util/removeVietnameseTones";
 const initialState = {
   sinhVien: [],
-  originalSinhVien: []
+  originalSinhVien: [],
 };
 
 const sinhVienSlice = createSlice({
@@ -34,13 +34,14 @@ const sinhVienSlice = createSlice({
     timKiemSinhVien: (state, action) => {
       const search = removeVietnameseTones(action.payload.toLowerCase());
       state.sinhVien = state.originalSinhVien.filter((item) =>
-        removeVietnameseTones(item.mssv.toLowerCase()).includes(search)
+        removeVietnameseTones(item.mssv.toLowerCase().trim()).includes(search)
       );
     },
+  
   },
 });
 
-export const { themSinhVien, xoaSinhVien, capNhatSinhVien, timKiemSinhVien } =
+export const { themSinhVien, xoaSinhVien, capNhatSinhVien, timKiemSinhVien, } =
   sinhVienSlice.actions;
 
 export default sinhVienSlice.reducer;
