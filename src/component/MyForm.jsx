@@ -12,7 +12,7 @@ import sinhVienSlice, {
 } from "../redux/sinhVienSlice";
 const MyForm = () => {
   const [editingSinhVien, setEditingSinhVien] = useState(false);
-  const { sinhVien } = useSelector((state) => state.sinhVienSlice);
+  const { sinhVien, originalSinhVien } = useSelector((state) => state.sinhVienSlice);
   const [arrSinhVien, setArrSinhVien] = useState(sinhVien);
   const dispatch = useDispatch();
   const {
@@ -116,11 +116,9 @@ const MyForm = () => {
     console.log(event.target.value);
     const searchValue = event.target.value;
 
-    if (searchValue === "") {
-      // Nếu ô tìm kiếm bị xóa hết, cập nhật lại mảng sinh viên từ store gốc
-      setArrSinhVien(sinhVien);
+    if (searchValue == "") {
+      setArrSinhVien(originalSinhVien);
     } else {
-      // Nếu có giá trị tìm kiếm, thực hiện tìm kiếm
       dispatch(timKiemSinhVien(searchValue));
     }
   };
